@@ -2,9 +2,8 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 
-namespace WebApplication1.Controllers
+namespace WebApplication2.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -12,21 +11,21 @@ namespace WebApplication1.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             using var client = new HttpClient
             {
-                BaseAddress = new Uri("https://httpbin.org/")
+                BaseAddress = new Uri("http://httpbin.org/")
             };
 
-            var response = await client.SendAsync(
+            var response = client.SendAsync(
                 new HttpRequestMessage(HttpMethod.Get, "get")
                 {
                     Version = HttpVersion.Version20,
                 });
 
-            if (response.IsSuccessStatusCode)
-                return Ok(response.Content);
+            if (response.Result.IsSuccessStatusCode)
+                return Ok(response.Result.Content);
 
             return BadRequest();
         }
